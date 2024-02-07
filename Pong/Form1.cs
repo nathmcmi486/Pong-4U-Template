@@ -57,7 +57,8 @@ namespace Pong
         const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle            
         const int PADDLE_WIDTH = 10;
         const int PADDLE_HEIGHT = 40;
-        int ballChangeSpeed;
+        int ballChangeXSpeed;
+        int ballChangeYSpeed;
         Rectangle player1, player2;
 
         //player and game scores
@@ -192,18 +193,18 @@ namespace Pong
 
             if (ballMoveDown)
             {
-                ball.Y -= (BALL_SPEED + ballChangeSpeed);
+                ball.Y -= (BALL_SPEED + ballChangeYSpeed);
             } else
             {
-                ball.Y += (BALL_SPEED + ballChangeSpeed);
+                ball.Y += (BALL_SPEED + ballChangeYSpeed);
             }
 
             if (ballMoveRight)
             {
-                ball.X += (BALL_SPEED + ballChangeSpeed);
+                ball.X += (BALL_SPEED + ballChangeXSpeed);
             } else
             {
-                ball.X -= (BALL_SPEED + ballChangeSpeed);
+                ball.X -= (BALL_SPEED + ballChangeXSpeed);
             }
 
             if (fakeBallMoveDown)
@@ -254,9 +255,14 @@ namespace Pong
                 ballMoveDown = false;
 
                 // Stops ball from going down if it's speed it negative
-                if (ballChangeSpeed < 0)
+                if (ballChangeXSpeed < 0)
                 {
-                    ballChangeSpeed = ballChangeSpeed * -1;
+                    ballChangeXSpeed = ballChangeXSpeed * -1;
+                }
+
+                if (ballChangeYSpeed < 0)
+                {
+                    ballChangeYSpeed = ballChangeYSpeed * -1;
                 }
 
                 collisionSound.Play();
@@ -267,9 +273,14 @@ namespace Pong
                 ballMoveDown = true;
 
                 // Stops ball from going up if it's speed it negative
-                if (ballChangeSpeed < 0)
+                if (ballChangeXSpeed < 0)
                 {
-                    ballChangeSpeed = ballChangeSpeed * -1;
+                    ballChangeXSpeed = ballChangeXSpeed * -1;
+                }
+
+                if (ballChangeYSpeed < 0)
+                {
+                    ballChangeYSpeed = ballChangeYSpeed * -1;
                 }
 
                 collisionSound.Play();
@@ -322,8 +333,10 @@ namespace Pong
             if (player1.IntersectsWith(ball) || player2.IntersectsWith(ball))
             {
                 Random rand = new Random();
-                int change = rand.Next(-3, 4);
-                ballChangeSpeed += change;
+                int changeX = rand.Next(-3, 4);
+                int changeY = rand.Next(-3, 4);
+                ballChangeXSpeed += changeX;
+                ballChangeYSpeed += changeY;
 
                 ballMoveDown = !ballMoveDown;
                 ballMoveRight = !ballMoveRight;
@@ -351,6 +364,8 @@ namespace Pong
 
                 fakeBall.X = this.Width / 2;
                 fakeBall.Y = this.Height / 2;
+                ballChangeXSpeed = 0;
+                ballChangeYSpeed = 0;
 
                 if (player2Score != 3)
                 {
@@ -369,6 +384,8 @@ namespace Pong
 
                 fakeBall.X = this.Width / 2;
                 fakeBall.Y = this.Height / 2;
+                ballChangeXSpeed = 0;
+                ballChangeYSpeed = 0;
 
                 if (player1Score != 3)
                 {
